@@ -12,7 +12,7 @@ typedef struct player_properties{
     int col;
 } PLAYER;
 
-void getNickname(char *nickname, int size);
+void get_nickname(char *nickname, int size);
 void get_move(char board[3][3], char *nickname, int *row, int *col);
 void display_board(char board[3][3]);
 int check_board(char board[3][3], PLAYER player);
@@ -24,13 +24,13 @@ int main(void){
     
     // Get info for player 1
     PLAYER player1;
-    getNickname(player1.nickname, NICKNAME_SIZE_MAX);
+    get_nickname(player1.nickname, NICKNAME_SIZE_MAX);
     player1.mark = 'x';
     player1.score = 0;
     
     // Get info for player 2
     PLAYER player2;
-    getNickname(player2.nickname, NICKNAME_SIZE_MAX);
+    get_nickname(player2.nickname, NICKNAME_SIZE_MAX);
     player2.mark = 'o';
     player2.score = 0;
 
@@ -181,7 +181,7 @@ void display_board(char board[3][3]){
 }
 
 
-void getNickname(char *nickname, int size){
+void get_nickname(char *nickname, int size){
     while (1){
         printf("Enter a nickname up to %d characters long: ", size);
         scanf(" %s", nickname);

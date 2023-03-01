@@ -149,7 +149,7 @@ void get_move(char board[3][3], char *nickname, int *row, int *col){
 int check_board(char board[3][3], PLAYER player){
     // Check rows
     for (int i = 0; i < 3; i++){
-        if ((board[i][0] == board[i][1]) && (board[i][0] == board[0][2]) && (board[i][0] == player.mark)){
+        if ((board[i][0] == board[i][1]) && (board[i][0] == board[i][2]) && (board[i][0] == player.mark)){
             return 1;
         }
     }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define NICKNAME_SIZE_MAX 5
 
@@ -24,12 +25,15 @@ int main(void){
     
     // Get info for player 1
     PLAYER player1;
+    printf("Player 1:\n");
     get_nickname(player1.nickname, NICKNAME_SIZE_MAX);
     player1.mark = 'x';
     player1.score = 0;
     
     // Get info for player 2
     PLAYER player2;
+    system("clear"); // For Windows use system("cls");
+    printf("Player 2:\n");
     get_nickname(player2.nickname, NICKNAME_SIZE_MAX);
     player2.mark = 'o';
     player2.score = 0;
@@ -51,12 +55,16 @@ int main(void){
         player2.row = player2.col = -1;
         
         while (moves < MAX_MOVES){
-            if (moves == 0) display_board(board); // display empty board
+            if (moves == 0){
+                system("clear"); // For Windows use system("cls");
+                display_board(board); // display empty board
+            }
             
             // Player 1 makes a move
             get_move(board, player1.nickname, &player1.row, &player1.col);
             board[player1.row][player1.col] = player1.mark;
             moves++;
+            system("clear"); // For Windows use system("cls");
             display_board(board);
             
             /* needs minimum of 5 moves before someone wins */
@@ -66,13 +74,13 @@ int main(void){
                     player1.score++;
                     player1.status = 1;
                     player2.status = 0;
-                    goto exit;
+                    goto result;
                 }
                 else if (check_board(board, player2)){
                     player2.score++;
                     player2.status = 1;
                     player1.status = 0;
-                    goto exit;
+                    goto result;
                 }
             }
             
@@ -80,6 +88,7 @@ int main(void){
             get_move(board, player2.nickname, &player2.row, &player2.col);
             board[player2.row][player2.col] = player2.mark;
             moves++;
+            system("clear"); // For Windows use system("cls");
             display_board(board);
             
             /* needs minimum of 5 moves before someone wins */
@@ -89,17 +98,17 @@ int main(void){
                     player1.score++;
                     player1.status = 1;
                     player2.status = 0;
-                    goto exit;
+                    goto result;
                 }
                 else if (check_board(board, player2)){
                     player2.score++;
                     player2.status = 1;
                     player1.status = 0;
-                    goto exit;
+                    goto result;
                 }
             }
         }
-        exit:
+        result:
             if (player1.status == 1) {
                 printf("%s WINS!\n", player1.nickname);
             }
@@ -109,24 +118,25 @@ int main(void){
             else {
                 printf("It's a draw!\n");
             }
-            printf("Do you want to play again? [y/n] ");
-            scanf(" %c", &answer);
-            switch (answer){
-                case 'N':
-                case 'n':
-                    keepPlaying = 0;
-                    printf("Final score: \n");
-                    printf("-----------\n");
-                    printf("%s : %d\n", player1.nickname, player1.score);
-                    printf("%s : %d\n", player2.nickname, player2.score);
-                    break;
-                case 'Y':
-                case 'y':
-                    break;
-                default:
-                    printf("ERROR: Invalid answer\n");
-                    goto exit;
-            }
+            exit:
+                printf("Do you want to play again? [y/n] ");
+                scanf(" %c", &answer);
+                switch (answer){
+                    case 'N':
+                    case 'n':
+                        keepPlaying = 0;
+                        printf("Final score: \n");
+                        printf("-----------\n");
+                        printf("%s : %d pts\n", player1.nickname, player1.score);
+                        printf("%s : %d pts\n", player2.nickname, player2.score);
+                        break;
+                    case 'Y':
+                    case 'y':
+                        break;
+                    default:
+                        printf("ERROR: Invalid answer\n");
+                        goto exit;
+                }
     }
 
     return 0;

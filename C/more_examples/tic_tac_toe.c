@@ -42,7 +42,7 @@ int main(void){
         // (Re)-initialize board
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 3; j++){
-            board[i][j] = '\0';
+            board[i][j] = ' ';
             }
         }
         // (Re)-set moves played in game
@@ -149,7 +149,7 @@ void get_move(char board[3][3], char *nickname, int *row, int *col){
         printf("%s, it's your turn! Please give coordinates (row column): ", nickname);
         scanf(" %d %d", &i, &j);
         while(getchar() != '\n'); // empty stdin buffer
-    } while (i < 0 || i > 2 || j < 0 || j > 2 || board[i][j] != '\0'); /* Valid move cannot be out of board boundaries, or occupied position */
+    } while (i < 0 || i > 2 || j < 0 || j > 2 || board[i][j] != ' '); /* Valid move cannot be out of board boundaries, or occupied position */
     *row = i;
     *col = j;
     return;

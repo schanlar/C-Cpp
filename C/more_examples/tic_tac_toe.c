@@ -19,7 +19,7 @@ void display_board(char board[3][3]);
 int check_board(char board[3][3], PLAYER player);
 
 int main(void){
-    const int MAX_MOVES = 8;
+    const int MAX_MOVES = 9;
     int keepPlaying = 1;
     char answer, board[3][3];
     
@@ -60,55 +60,44 @@ int main(void){
                 display_board(board); // display empty board
             }
             
-            // Player 1 makes a move
+            /* Player 1 makes a move */
             get_move(board, player1.nickname, &player1.row, &player1.col);
             board[player1.row][player1.col] = player1.mark;
             moves++;
             system("clear"); // For Windows use system("cls");
             display_board(board);
             
-            /* needs minimum of 5 moves before someone wins */
+            /* needs minimum of 5 moves before someone can win */
             if (moves >= 5){
-                /* check rows, columns, and diagonals for winner */
+                /* check if player 1 wins */
                 if (check_board(board, player1)){
                     player1.score++;
                     player1.status = 1;
                     player2.status = 0;
-                    goto result;
-                }
-                else if (check_board(board, player2)){
-                    player2.score++;
-                    player2.status = 1;
-                    player1.status = 0;
-                    goto result;
+                    goto RESULT;
                 }
             }
             
-            // Player 2 makes a move 
+            /* Player 2 makes a move */ 
+            if (moves == MAX_MOVES) goto RESULT; // last move goes to player 1
             get_move(board, player2.nickname, &player2.row, &player2.col);
             board[player2.row][player2.col] = player2.mark;
             moves++;
             system("clear"); // For Windows use system("cls");
             display_board(board);
             
-            /* needs minimum of 5 moves before someone wins */
+            /* needs minimum of 5 moves before someone can win */
             if (moves >= 5){
-                /* check rows, columns, and diagonals for winner */
-                if (check_board(board, player1)){
-                    player1.score++;
-                    player1.status = 1;
-                    player2.status = 0;
-                    goto result;
-                }
-                else if (check_board(board, player2)){
+                /* check if player 2 wins */
+                if (check_board(board, player2)){
                     player2.score++;
                     player2.status = 1;
                     player1.status = 0;
-                    goto result;
+                    goto RESULT;
                 }
             }
         }
-        result:
+        RESULT:
             if (player1.status == 1) {
                 printf("%s WINS!\n", player1.nickname);
             }
@@ -118,7 +107,7 @@ int main(void){
             else {
                 printf("It's a draw!\n");
             }
-            exit:
+            EXIT:
                 printf("Do you want to play again? [y/n] ");
                 scanf(" %c", &answer);
                 switch (answer){
@@ -135,7 +124,7 @@ int main(void){
                         break;
                     default:
                         printf("ERROR: Invalid answer\n");
-                        goto exit;
+                        goto EXIT;
                 }
     }
 

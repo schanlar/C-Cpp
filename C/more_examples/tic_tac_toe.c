@@ -16,7 +16,7 @@ typedef struct player_properties{
 void get_nickname(char *nickname, int size);
 void get_move(char board[3][3], char *nickname, int *row, int *col);
 void display_board(char board[3][3]);
-int check_board(char board[3][3], PLAYER player);
+int is_winner(char board[3][3], PLAYER player);
 
 int main(void){
     const int MAX_MOVES = 9;
@@ -70,7 +70,7 @@ int main(void){
             /* needs minimum of 5 moves before someone can win */
             if (moves >= 5){
                 /* check if player 1 wins */
-                if (check_board(board, player1)){
+                if (is_winner(board, player1)){
                     player1.score++;
                     player1.status = 1;
                     player2.status = 0;
@@ -89,7 +89,7 @@ int main(void){
             /* needs minimum of 5 moves before someone can win */
             if (moves >= 5){
                 /* check if player 2 wins */
-                if (check_board(board, player2)){
+                if (is_winner(board, player2)){
                     player2.score++;
                     player2.status = 1;
                     player1.status = 0;
@@ -145,7 +145,7 @@ void get_move(char board[3][3], char *nickname, int *row, int *col){
 }
 
 
-int check_board(char board[3][3], PLAYER player){
+int is_winner(char board[3][3], PLAYER player){
     // Check rows
     for (int i = 0; i < 3; i++){
         if ((board[i][0] == board[i][1]) && (board[i][0] == board[i][2]) && (board[i][0] == player.mark)){

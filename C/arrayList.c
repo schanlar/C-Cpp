@@ -95,12 +95,11 @@ void display(List l){
 int main(void){
     srand(time(NULL));
     
-    /* 
-    * This is a variable stored in stack memory.
-    * Within the stack frame there is a pointer (my_list.array) 
-    * that points to the allocated memory in heap where the array is defined. 
-    * In other words, the pointer "my_list.array" is stored in stack
-    * but it points to the heap memory where the actual data are stored.
+    /*
+    * my_list is a variable of type List that is stored in stack memory.
+    * Within the main stack frame, there is a pointer (my_list.array) that
+    * itself is stored in stack but it points to a location in heap memory: the 
+    * address where the actual array data are stored.
     */
     List my_list; 
     my_list.size = 0;

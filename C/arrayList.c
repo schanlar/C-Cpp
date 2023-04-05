@@ -6,43 +6,57 @@ typedef struct list_properties{
     int size;
 }List;
 
-List append(List v, double num){
-    v.array = (double*) realloc(v.array, sizeof(double) * (v.size + 1));
-    v.array[v.size] = num;
-    (v.size)++;
-    return v;
+
+List insert(List l, double num){
+    l.array = (double *) realloc(l.array, sizeof(double) * (l.size + 1));
+    l.array[l.size] = num;
+    (l.size)++;
+    return l;
 }
 
-void freeList(List* vp){;
-    if (vp == NULL){
+void append(List *pl, double num){
+    pl -> array = (double *) realloc(pl -> array, sizeof(double) * (pl -> size + 1));
+    pl -> array[pl -> size] = num;
+    (pl -> size)++;
+    return;
+}
+
+void freeList(List *pl){
+    if (pl == NULL){
         return;
     }
-    else {
-        free(vp -> array); // free the part that is stored in heap
-        vp = NULL;
+    else{
+        free(pl -> array);
+        pl = NULL;
         return;
     }
 }
 
-void display(List v){
+void display(List l){
     printf("[");
-    for (int i = 0; i < v.size; i++){
-        char *s = (i < v.size - 1) ? "%.1lf, " : "%.1lf";
-        printf(s, v.array[i]);
+    for (int i = 0; i < l.size; i++){
+        char *s = (i < l.size - 1) ? "%.1lf, " : "%.1lf";
+        printf(s, l.array[i]);
     }
     printf("]\n");
 }
 
 
+
 int main(void){
     List my_list;
     my_list.size = 0;
-    
-    for (int i = 1; i < 21; i++){
-        my_list = append(my_list, i);
+
+    for (int i = 1; i < 5; i++){
+        append(&my_list, i);
     }
-    
     display(my_list);
+    
+    for (int j = 10; j < 13; j++){
+        my_list = insert(my_list, j);
+    }
+    display(my_list);
+    
     freeList(&my_list);
     
     return 0;

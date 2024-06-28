@@ -7,22 +7,45 @@
 #define DELETED NAN  // Marker for deleted elements
 #define EPSILON 1e-6 // Tolerance for floating-point comparison
 
-/* Define some status codes  */
+/* Define some status codes */
 #define LIST_SUCCESS 0
 #define LIST_ERROR_NOT_INITIALIZED -1
 #define LIST_ERROR_NAN_VALUE -2
 #define LIST_ERROR_NOT_FOUND -3
 
-// Struct definition for the dynamic list
+/**
+ * @struct list_properties
+ * @brief Structure to represent the properties of a dynamic list
+ * 
+ * @var list_properties::array
+ * Pointer to the array holding list elements
+ * 
+ * @var list_properties::length
+ * Number of active elements in the list
+ * 
+ * @var list_properties::capacity
+ * Total capacity of the array
+ * 
+ * @var list_properties::deletions
+ * Number of deleted elements
+ * 
+ * @var list_properties::occupied
+ * Number of occupied slots (active + deleted)
+ */
 typedef struct list_properties {
-    double* array;          // Pointer to the array holding list elements
-    size_t length;    // Number of active elements in the list
-    size_t capacity;  // Total capacity of the array
-    size_t deletions; // Number of deleted elements
-    size_t occupied;  // Number of occupied slots (active + deleted)
+    double* array;
+    size_t length;
+    size_t capacity;
+    size_t deletions;
+    size_t occupied;
 } LIST;
 
-// Function to safely allocate memory, exits on failure
+/**
+ * @brief Safely allocate memory, exits on failure
+ * 
+ * @param size Size of memory to allocate
+ * @return void* Pointer to the allocated memory
+ */
 void* safe_malloc(size_t size) {
     void* ptr = malloc(size);
     if (!ptr) {
@@ -32,7 +55,13 @@ void* safe_malloc(size_t size) {
     return ptr;
 }
 
-// Function to safely reallocate memory, exits on failure
+/**
+ * @brief Safely reallocate memory, exits on failure
+ * 
+ * @param ptr Pointer to the existing memory
+ * @param new_size New size of memory to allocate
+ * @return void* Pointer to the reallocated memory
+ */
 void* safe_realloc(void* ptr, size_t new_size) {
     void* new_ptr = realloc(ptr, new_size);
     if (!new_ptr) {
@@ -42,7 +71,12 @@ void* safe_realloc(void* ptr, size_t new_size) {
     return new_ptr;
 }
 
-// Function to initialize a list with a given initial capacity
+/**
+ * @brief Initialize a list with a given initial capacity
+ * 
+ * @param initial_capacity Initial capacity of the list
+ * @return LIST Initialized list
+ */
 LIST init_list(size_t initial_capacity) {
     LIST l;
     l.array = (double*)safe_malloc(sizeof(double) * initial_capacity);
@@ -53,14 +87,23 @@ LIST init_list(size_t initial_capacity) {
     return l;
 }
 
-// Function to check if a list exists and is initialized
+/**
+ * @brief Check if a list exists and is initialized
+ * 
+ * @param pl Pointer to the list
+ * @return int 1 if the list exists, 0 otherwise
+ */
 int list_exists(const LIST* pl) {
     if (pl && pl->array) return 1;
     printf("List is not initialized!\n");
     return 0;
 }
 
-// Function to free memory allocated to a list
+/**
+ * @brief Free memory allocated to a list
+ * 
+ * @param pl Pointer to the list
+ */
 void free_list(LIST* pl) {
     if (list_exists(pl)) {
         free(pl->array);
@@ -72,7 +115,11 @@ void free_list(LIST* pl) {
     }
 }
 
-// Function to print the status of the list
+/**
+ * @brief Print the status of the list
+ * 
+ * @param pl Pointer to the list
+ */
 void status(const LIST* pl) {
     if (!list_exists(pl)) return;
 
@@ -87,7 +134,11 @@ void status(const LIST* pl) {
     }
 }
 
-// Function to display the active elements of the list
+/**
+ * @brief Display the active elements of the list
+ * 
+ * @param pl Pointer to the list
+ */
 void display(const LIST* pl) {
     if (!list_exists(pl)) return;
 
@@ -105,7 +156,12 @@ void display(const LIST* pl) {
     printf("]\n");
 }
 
-// Function to resize the list's capacity
+/**
+ * @brief Resize the list's capacity
+ * 
+ * @param pl Pointer to the list
+ * @param new_capacity New capacity of the list
+ */
 void resize_list(LIST* pl, size_t new_capacity) {
     if (!list_exists(pl)) return;
 
@@ -113,7 +169,12 @@ void resize_list(LIST* pl, size_t new_capacity) {
     pl->capacity = new_capacity;
 }
 
-// Function to append an element to the list
+/**
+ * @brief Append an element to the list
+ * 
+ * @param pl Pointer to the list
+ * @param num Element to append to the list
+ */
 void append(LIST* pl, double num) {
     if (!list_exists(pl)) return;
 
@@ -129,7 +190,13 @@ void append(LIST* pl, double num) {
     pl->length++;
 }
 
-// Function to compare two doubles with a tolerance
+/**
+ * @brief Compare two doubles with a tolerance
+ * 
+ * @param a Pointer to the first double
+ * @param b Pointer to the second double
+ * @return int 0 if the doubles are equal within the tolerance, 1 if the first double is greater, -1 if the second double is greater
+ */
 int compare_doubles(const void* a, const void* b) {
     double arg1 = *(const double*)a;
     double arg2 = *(const double*)b;
@@ -139,7 +206,14 @@ int compare_doubles(const void* a, const void* b) {
     return -1;
 }
 
-// Function to check if a list contains a given element
+/**
+ * @brief Check if a list contains a given element
+ * 
+ * @param pl Pointer to the list
+ * @param num Element to search for
+ * @param index Pointer to store the index of the found element
+ * @return int LIST_SUCCESS if the element is found, LIST_ERROR_NOT_INITIALIZED if the list is not initialized, LIST_ERROR_NOT_FOUND if the element is not found
+ */
 int contains(const LIST* pl, double num, size_t* index) {
     if (!list_exists(pl)) return LIST_ERROR_NOT_INITIALIZED;
 
@@ -157,7 +231,11 @@ int contains(const LIST* pl, double num, size_t* index) {
     return LIST_ERROR_NOT_FOUND;
 }
 
-// Function to compactify the list by removing deleted elements
+/**
+ * @brief Compactify the list by removing deleted elements
+ * 
+ * @param pl Pointer to the list
+ */
 void compactify(LIST* pl) {
     if (!list_exists(pl)) return;
 
@@ -173,7 +251,14 @@ void compactify(LIST* pl) {
     resize_list(pl, pl->occupied);
 }
 
-// Function to remove (and return) a specific element from the list
+/**
+ * @brief Remove (and return) a specific element from the list
+ * 
+ * @param pl Pointer to the list
+ * @param num Element to remove
+ * @param out Pointer to store the removed element
+ * @return int LIST_SUCCESS if the element is removed, LIST_ERROR_NOT_INITIALIZED if the list is not initialized, LIST_ERROR_NAN_VALUE if the element is NaN, LIST_ERROR_NOT_FOUND if the element is not found
+ */
 int erase(LIST* pl, double num, double* out) {
     if (!list_exists(pl)) return LIST_ERROR_NOT_INITIALIZED;
 
@@ -203,7 +288,13 @@ int erase(LIST* pl, double num, double* out) {
     return LIST_ERROR_NOT_FOUND;
 }
 
-// Function to check if two lists are equal.
+/**
+ * @brief Check if two lists are equal
+ * 
+ * @param pl1 Pointer to the first list
+ * @param pl2 Pointer to the second list
+ * @return int 1 if the lists are equal, LIST_ERROR_NOT_INITIALIZED if either list is not initialized, 0 otherwise
+ */
 int is_equal(const LIST* pl1, const LIST* pl2) {
     if (!list_exists(pl1) || !list_exists(pl2)) return LIST_ERROR_NOT_INITIALIZED;
     if (pl1->length != pl2->length) {
@@ -226,7 +317,11 @@ int is_equal(const LIST* pl1, const LIST* pl2) {
     return 1;
 }
 
-// Function to sort the non-NaN elements of the list in ascending order.
+/**
+ * @brief Sort the non-NaN elements of the list in ascending order
+ * 
+ * @param pl Pointer to the list
+ */
 void sort(LIST* pl) {
     if (!list_exists(pl)) return;
 
@@ -234,17 +329,21 @@ void sort(LIST* pl) {
         return; // No need to sort if there are no non-NaN elements
     }
 
-    // Compactify the array to remove the NAN values.
+    // Compactify the array to remove the NaN values
     compactify(pl);
 
     // Use the quicksort algorithm from stdlib to sort the array with active elements
     qsort(pl->array, pl->length, sizeof(double), compare_doubles);
 }
 
+
+
+
+// Example usage
 int main(void) {
     srand(time(NULL));
     
-    //Initialize list 
+    // Initialize list 
     LIST ml = init_list(4);
     display(&ml);
     status(&ml);

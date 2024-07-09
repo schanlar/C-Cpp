@@ -18,7 +18,7 @@ A **linked list** is a linear data structure in which elements are not stored in
 - **deleteFirstNode**: Delete the first node of the linked list.
 - **deleteLastNode**: Delete the last node of the linked list.
 - **deleteNodeAtPosition**: Delete a node at a specific position in the linked list.
-- **deleteNode**: Delete the first node with a given key from the linked list.
+- **deleteNodeWithKey**: Delete the first node with a given key from the linked list.
 - **deleteLinkedList**: Delete the entire linked list.
 - **findFirstNodeWithKey**: Find the first node with the specified key in the linked list.
 - **findAllNodesWithKey**: Find all nodes with the specified key in the linked list.
